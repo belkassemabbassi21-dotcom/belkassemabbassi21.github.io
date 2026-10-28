@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>XSS Lab | Belkassem</title>
+<style>
+body{background:#000;color:#0f0;font-family:monospace;padding:20px;}
+.box{border:1px solid #0f0;padding:15px;margin:15px 0;background:#111;}
+input{width:80%;padding:8px;background:#000;color:#0f0;border:1px solid #0f0;}
+button{padding:8px 15px;background:#0f0;color:#000;border:none;cursor:pointer;}
+.warn{border:1px solid red;color:red;padding:10px;background:#1a0000;}
+</style>
+</head>
+<body>
+<h2>🔬 XSS Lab - خاص بالتعلم فقط</h2>
+
+<div class="warn">
+⚠️ هاد الصفحة فيها ثغرة متعمدة! مسموح تجرب عليها لأنها موقعك انت فقط. ممنوع تجربها على مواقع الناس.
+</div>
+
+<div class="box">
+<h3>المستوى 1 - Reflected XSS</h3>
+<p>الرابط يقرا اسمك من ?name=</p>
+<div id="output"></div>
+<script>
+// ثغرة متعمدة للتعلم
+let params = new URLSearchParams(window.location.search);
+let name = params.get('name');
+if(name){
+  document.getElementById('output').innerHTML = "Hello " + name; // vulnerable!
+}
+</script>
+<p>جرب هذا الرابط:</p>
+<code>?name=Belkassem</code><br><br>
+<code>?name=&lt;img src=x onerror=alert('XSS1')&gt;</code>
+</div>
+
+<div class="box">
+<h3>المستوى 2 - DOM XSS</h3>
+<input id="search" placeholder="اكتب هنا وجرب payload">
+<button onclick="go()">عرض</button>
+<div id="result" style="margin-top:10px"></div>
+<script>
+function go(){
+  let val = document.getElementById('search').value;
+  document.getElementById('result').innerHTML = val; // vulnerable!
+}
+</script>
+<p>جرب تكتب: <code>&lt;svg onload=alert('XSS2')&gt;</code></p>
+</div>
+
+<div class="box">
+<a href="index.html" style="color:#0f0"><- ارجع للموقع الأصلي المحمي</a>
+</div>
+
+</body>
+</html>
